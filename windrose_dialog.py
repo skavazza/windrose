@@ -139,7 +139,7 @@ class WindRoseDialog(QDialog, FORM_CLASS):
         self.group_name = f"风玫瑰图-{year}-{month_str}-{lon_str}_{lat_str}"
 
         self.btn_generate.setEnabled(False)
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
         self.worker = WindRoseWorker(
             self.current_lon, self.current_lat, year, month, height
