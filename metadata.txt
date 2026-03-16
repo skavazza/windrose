@@ -12,4 +12,4 @@ repository=https://github.com/jokulsarlon/windrose
 tags=windrose,风向,玫瑰图,气象,wind direction,rose diagram,meteorology
 homepage=https://github.com/jokulsarlon/windrose
 category=Analysis
-icon=icon.png
+icon=icons/icon.png
