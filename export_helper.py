@@ -38,7 +38,8 @@ class ExportHelper:
         settings.setExtent(extent)
         settings.setOutputSize(QSize(target_width, target_height))
         settings.setOutputDpi(dpi)
-        settings.setBackgroundColor(QColor(255, 255, 255, 255))  # 白色背景
+        # 设置背景透明
+        settings.setBackgroundColor(QColor(0, 0, 0, 0))  # 完全透明背景
 
         svg_gen = QSvgGenerator()
         svg_gen.setFileName(file_path)

@@ -4,7 +4,7 @@ import numpy as np
 from qgis.core import (
     QgsVectorLayer, QgsFeature, QgsGeometry, QgsField, QgsPointXY,
     QgsProject, QgsLayerTreeLayer, QgsRendererCategory, QgsCategorizedSymbolRenderer,
-    QgsFillSymbol
+    QgsFillSymbol, QgsMarkerSymbol
 )
 from qgis.PyQt.QtCore import QVariant
 
@@ -138,15 +138,21 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     tri_layer.setRenderer(renderer)
     layers.append(tri_layer)
 
-    # 6. 坐标参考线
+    # 6. 坐标参考线（南北线加长，确保超出扇区范围）
     ref_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "坐标线", "memory")
     pr = ref_layer.dataProvider()
     pr.addAttributes([QgsField("Type", QVariant.String)])
     ref_layer.updateFields()
+    # 计算东西方向长度（适当加长）
     if max_freq > 0:
-        EW_len = max(freq[4], freq[12]) * scale * 1.2
+        # 东西线：取东西向两个扇区的最大值，乘以1.05倍，确保稍长
+        EW_len = max(freq[4], freq[12]) * scale * 1.05
+        # 南北线：取最大半径的1.05倍，明显长于扇区
+        SN_len = max_freq * scale * 1.05
     else:
         EW_len = 0.001
+        SN_len = 0.001
+    # 东西线
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon - EW_len, lat),
@@ -154,7 +160,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     ]))
     ft.setAttributes(["EW"])
     pr.addFeature(ft)
-    SN_len = max_freq * scale * 1.2
+    # 南北线
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon, lat - SN_len),
@@ -164,7 +170,26 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     pr.addFeature(ft)
     layers.append(ref_layer)
 
-    # 7. 同心圆参考线
+    # 7. 指北箭头：位于南北线的北端点
+    arrow_layer = QgsVectorLayer("Point?crs=EPSG:4326", "指北箭头", "memory")
+    pr_arrow = arrow_layer.dataProvider()
+    pr_arrow.addAttributes([QgsField("Direction", QVariant.String)])
+    arrow_layer.updateFields()
+    north_point = QgsPointXY(lon, lat + SN_len)
+    ft_arrow = QgsFeature()
+    ft_arrow.setGeometry(QgsGeometry.fromPointXY(north_point))
+    ft_arrow.setAttributes(["N"])
+    pr_arrow.addFeature(ft_arrow)
+    arrow_symbol = QgsMarkerSymbol.createSimple({
+        'name': 'triangle',
+        'color': 'black',
+        'size': '3.0',
+        'angle': '0'
+    })
+    arrow_layer.renderer().setSymbol(arrow_symbol)
+    layers.append(arrow_layer)
+
+    # 8. 同心圆参考线
     if show_circles:
         circle_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "同心圆参考线", "memory")
         pr = circle_layer.dataProvider()

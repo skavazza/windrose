@@ -171,8 +171,8 @@ class WindRoseDialog(QDialog, FORM_CLASS):
                 StyleManager.apply_style_to_layers(layers, self.style_name, self.opacity)
 
                 if self.export_svg and layers:
-                    # 选择需要导出的图层：扇区面、闭合面、坐标线（顺序决定绘制层级）
-                    export_layer_names = ["扇区面", "闭合面", "坐标线"]
+                    # 选择需要导出的图层：扇区面、闭合面、坐标线、指北箭头
+                    export_layer_names = ["扇区面", "闭合面", "坐标线", "指北箭头"]
                     export_layers = [lyr for lyr in layers if lyr.name() in export_layer_names]
                     if export_layers:
                         self.export_helper.export_layers_as_svg(export_layers, self.svg_path, self.iface)
