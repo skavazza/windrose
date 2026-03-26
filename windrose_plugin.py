@@ -11,14 +11,14 @@ from .windrose_dialog import WindRoseDialog
 
 
 class WindRosePlugin:
-    """QGIS插件主类"""
+    """QGIS Plugin Main Class"""
 
     def __init__(self, iface):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
         self.actions = []
-        self.menu = self.tr(u'&风向玫瑰图')
-        self.toolbar = self.iface.addToolBar(u'风向玫瑰图')
+        self.menu = self.tr(u'&wind rose diagram')
+        self.toolbar = self.iface.addToolBar(u'Wind Rose Diagram')
         self.toolbar.setObjectName(u'WindRoseToolbar')
 
         self.dialog = None
@@ -46,17 +46,17 @@ class WindRosePlugin:
         return action
 
     def initGui(self):
-        icon_path = os.path.join(self.plugin_dir, 'icons', 'windrose.svg')  # 可放置一个图标文件
+        icon_path = os.path.join(self.plugin_dir, 'icons', 'windrose.svg')  # You can place an icon file.
         self.add_action(
             icon_path,
-            text=self.tr(u'风向玫瑰图'),
+            text=self.tr(u'Wind rose diagram'),
             callback=self.run,
-            status_tip=self.tr(u'生成风向玫瑰图'),
+            status_tip=self.tr(u'Generate wind rose diagram'),
             parent=self.iface.mainWindow())
 
     def unload(self):
         for action in self.actions:
-            self.iface.removePluginMenu(self.tr(u'&风向玫瑰图'), action)
+            self.iface.removePluginMenu(self.tr(u'&Wind Rose Diagram'), action)
             self.iface.removeToolBarIcon(action)
         del self.toolbar
 
@@ -72,7 +72,7 @@ class WindRosePlugin:
             self.point_tool = QgsMapToolEmitPoint(canvas)
             self.point_tool.canvasClicked.connect(self.on_point_tool_clicked)
         canvas.setMapTool(self.point_tool)
-        self.iface.messageBar().pushInfo("地图选点", "请在地图上点击一个点。")
+        self.iface.messageBar().pushInfo("Map selection", "Please click on a point on the map.")
 
     def on_point_tool_clicked(self, point, button):
         canvas = self.iface.mapCanvas()
