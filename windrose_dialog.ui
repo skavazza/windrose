@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>风向玫瑰图设置</string>
+   <string>Wind Rose Diagram Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="grp_input">
      <property name="title">
-      <string>位置输入</string>
+      <string>Location input</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -25,26 +25,26 @@
         <item>
          <widget class="QToolButton" name="btn_map_point">
           <property name="text">
-           <string>地图选点</string>
+           <string>Map selection</string>
           </property>
           <property name="icon">
            <iconset theme="QStyle::SP_ArrowUp"/>
           </property>
           <property name="toolTip">
-           <string>点击地图选择点</string>
+           <string>Click on the map to select a point.</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btn_manual">
           <property name="text">
-           <string>手动输入</string>
+           <string>Manual input</string>
           </property>
           <property name="icon">
            <iconset theme="QStyle::SP_FileDialogDetailedView"/>
           </property>
           <property name="toolTip">
-           <string>手动输入经纬度</string>
+           <string>Manually enter latitude and longitude</string>
           </property>
          </widget>
         </item>
@@ -68,7 +68,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_lon">
           <property name="text">
-           <string>经度:</string>
+           <string>longitude:</string>
           </property>
          </widget>
         </item>
@@ -78,7 +78,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_lat">
           <property name="text">
-           <string>纬度:</string>
+           <string>latitude::</string>
           </property>
          </widget>
         </item>
@@ -93,13 +93,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>数据参数</string>
+      <string>Data parameters</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_year">
         <property name="text">
-         <string>年份:</string>
+         <string>years:</string>
         </property>
        </widget>
       </item>
@@ -119,7 +119,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_month">
         <property name="text">
-         <string>月份:</string>
+         <string>month:</string>
         </property>
        </widget>
       </item>
@@ -127,67 +127,67 @@
        <widget class="QComboBox" name="cmb_month">
         <item>
          <property name="text">
-          <string>全年</string>
+          <string>annual</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>1月</string>
+          <string>January</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>2月</string>
+          <string>February</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>3月</string>
+          <string>March</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>4月</string>
+          <string>April</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>5月</string>
+          <string>May</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>6月</string>
+          <string>June</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>7月</string>
+          <string>July</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>8月</string>
+          <string>August</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>9月</string>
+          <string>September</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>10月</string>
+          <string>Octuber</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>11月</string>
+          <string>November</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>12月</string>
+          <string>December</string>
          </property>
         </item>
        </widget>
@@ -195,7 +195,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_height">
         <property name="text">
-         <string>高度:</string>
+         <string>high:</string>
         </property>
        </widget>
       </item>
@@ -229,13 +229,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>输出样式</string>
+      <string>Output style</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label_style">
         <property name="text">
-         <string>配色方案:</string>
+         <string>Color scheme:</string>
         </property>
        </widget>
       </item>
@@ -245,7 +245,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_graph_style">
         <property name="text">
-         <string>图形样式:</string>
+         <string>Graphic style:</string>
         </property>
        </widget>
       </item>
@@ -253,12 +253,12 @@
        <widget class="QComboBox" name="cmb_graph_style">
         <item>
          <property name="text">
-          <string>扇区式</string>
+          <string>sector</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>同心圆式</string>
+          <string>concentric circles</string>
          </property>
         </item>
        </widget>
@@ -266,7 +266,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_opacity">
         <property name="text">
-         <string>扇区透明度:</string>
+         <string>Sector transparency:</string>
         </property>
        </widget>
       </item>
@@ -289,7 +289,7 @@
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="cb_add_to_project">
         <property name="text">
-         <string>添加到QGIS项目</string>
+         <string>Add to QGIS project</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -299,14 +299,14 @@
       <item row="4" column="0" colspan="2">
        <widget class="QCheckBox" name="cb_export_svg">
         <property name="text">
-         <string>导出SVG</string>
+         <string>Export SVG</string>
         </property>
        </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_svg_path">
         <property name="text">
-         <string>SVG保存路径:</string>
+         <string>SVG save path:</string>
         </property>
        </widget>
       </item>
@@ -318,7 +318,7 @@
         <item>
          <widget class="QPushButton" name="btn_browse_svg">
           <property name="text">
-           <string>浏览...</string>
+           <string>Browse...</string>
           </property>
          </widget>
         </item>
@@ -345,21 +345,21 @@
      <item>
       <widget class="QPushButton" name="btn_generate">
        <property name="text">
-        <string>生成</string>
+        <string>Generate</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btn_export_svg">
        <property name="text">
-        <string>导出SVG</string>
+        <string>Export SVG</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btn_cancel">
        <property name="text">
-        <string>取消</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
