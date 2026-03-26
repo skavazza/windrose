@@ -53,11 +53,11 @@ class WindRoseWorker(QObject):
             data = resp.json()
             key = f"wind_direction_{self.height}m"
             if "hourly" not in data or key not in data["hourly"]:
-                raise Exception(f"未找到风向数据（高度{self.height}m可能不支持）")
+                raise Exception(f"Wind direction data not found (height {self.height}m may not be supported)")
             wd = data["hourly"][key]
             wd = [x for x in wd if x is not None]
             if not wd:
-                raise Exception("风向数据全部为空")
+                raise Exception("Wind direction data is entirely empty")
             return wd
         except requests.exceptions.RequestException as e:
-            raise Exception(f"API请求失败: {e}")
+            raise Exception(f"API request failed: {e}")
