@@ -9,27 +9,27 @@ from qgis.core import (
 
 class StyleManager:
     STYLES = {
-        "默认": {
-            "扇区面": {"outline": "#000000", "width": 0.2},
-            "外环线": {"color": "#000000", "width": 0.5},
-            "采集点": {"color": "#FF0000", "size": 2.0},
-            "坐标线": {"color": "#000000", "width": 0.3},
-            "闭合面": {"outline": "#000000", "width": 0.2},  # 无填充，保持透明
-            "风向频率": {}
+        "default": {
+            "sector surface": {"outline": "#000000", "width": 0.2},
+            "outer ring road": {"color": "#000000", "width": 0.5},
+            "collection point": {"color": "#FF0000", "size": 2.0},
+            "coordinate lines": {"color": "#000000", "width": 0.3},
+            "closed surface": {"outline": "#000000", "width": 0.2},  # No filler, remains transparent
+            "wind direction frequency": {}
         },
-        "暖色": {
-            "扇区面": {"outline": "#BF360C", "width": 0.2},
-            "外环线": {"color": "#FF6F00", "width": 0.5},
-            "采集点": {"color": "#D32F2F", "size": 2.0},
-            "坐标线": {"color": "#757575", "width": 0.3},
-            "闭合面": {"outline": "#FF6F00", "width": 0.2},
+        "warm": {
+            "sector surface": {"outline": "#BF360C", "width": 0.2},
+            "outer ring road": {"color": "#FF6F00", "width": 0.5},
+            "collection point": {"color": "#D32F2F", "size": 2.0},
+            "coordinate lines": {"color": "#757575", "width": 0.3},
+            "closed surface": {"outline": "#FF6F00", "width": 0.2},
         },
-        "冷色": {
-            "扇区面": {"outline": "#0288D1", "width": 0.2},
-            "外环线": {"color": "#01579B", "width": 0.5},
-            "采集点": {"color": "#0D47A1", "size": 2.0},
-            "坐标线": {"color": "#BDBDBD", "width": 0.3},
-            "闭合面": {"outline": "#01579B", "width": 0.2},
+        "cool": {
+            "sector surface": {"outline": "#0288D1", "width": 0.2},
+            "outer ring road": {"color": "#01579B", "width": 0.5},
+            "collection point": {"color": "#0D47A1", "size": 2.0},
+            "coordinate lines": {"color": "#BDBDBD", "width": 0.3},
+            "closed surface": {"outline": "#01579B", "width": 0.2},
         }
     }
 
@@ -68,7 +68,7 @@ class StyleManager:
                     continue
 
                 if isinstance(symbol, QgsFillSymbol):
-                    # 不修改填充颜色，只修改轮廓和透明度
+                    # Do not modify fill color, only modify outline and opacity
                     if "outline" in props:
                         cls._set_fill_outline_color(symbol, QColor(props["outline"]))
                     if "width" in props:
