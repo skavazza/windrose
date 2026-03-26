@@ -20,7 +20,7 @@ def compute_frequencies(wind_dir_list):
     return freq, labels, angles
 
 
-def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", show_circles=False):
+def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", show_circles=False):
     project = QgsProject.instance()
     root = project.layerTreeRoot()
 
@@ -37,8 +37,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     group = root.addGroup(group_name)
     layers = []
 
-    # 1. 点图层
-    pt_layer = QgsVectorLayer("Point?crs=EPSG:4326", "采集点", "memory")
+    # 1. Point layer
+    pt_layer = QgsVectorLayer("Point?crs=EPSG:4326", "Collection point", "memory")
     pr = pt_layer.dataProvider()
     pr.addAttributes([QgsField("Lon", QVariant.Double), QgsField("Lat", QVariant.Double)])
     pt_layer.updateFields()
@@ -48,8 +48,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     pr.addFeature(ft)
     layers.append(pt_layer)
 
-    # 2. 风向频率表
-    freq_layer = QgsVectorLayer("None", "风向频率", "memory")
+    # 2. Wind direction frequency table
+    freq_layer = QgsVectorLayer("None", "Wind direction frequency", "memory")
     pr = freq_layer.dataProvider()
     pr.addAttributes([QgsField("Dir", QVariant.String),
                       QgsField("Angle", QVariant.Double),
@@ -63,7 +63,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     pr.addFeatures(features)
     layers.append(freq_layer)
 
-    # 计算顶点
+    # Calculate vertices
     center = QgsPointXY(lon, lat)
     points = []
     max_freq = max(freq) if max(freq) > 0 else 1
@@ -73,8 +73,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
         rad = np.radians((90 - ang) % 360)
         points.append(QgsPointXY(lon + R * np.cos(rad), lat + R * np.sin(rad)))
 
-    # 3. 外环线
-    line_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "外环线", "memory")
+    # 3. Outer Ring Road
+    line_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Outer Ring Road", "memory")
     pr = line_layer.dataProvider()
     pr.addAttributes([QgsField("MaxR", QVariant.Double)])
     line_layer.updateFields()
@@ -85,8 +85,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     pr.addFeature(ft)
     layers.append(line_layer)
 
-    # 4. 闭合面 - 透明填充，黑色轮廓
-    poly_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "闭合面", "memory")
+    # 4. Closed face - transparent fill, black outline
+    poly_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "Closed surface", "memory")
     pr = poly_layer.dataProvider()
     pr.addAttributes([QgsField("MaxR", QVariant.Double)])
     poly_layer.updateFields()
@@ -95,7 +95,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     ft.setAttributes([float(max_freq * scale)])
     pr.addFeature(ft)
 
-    # 设置闭合面符号
+    # Set closed surface symbol
     symbol = QgsFillSymbol.createSimple({
         'color': 'rgba(0,0,0,0)',
         'outline_color': 'black',
@@ -104,8 +104,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     poly_layer.renderer().setSymbol(symbol)
     layers.append(poly_layer)
 
-    # 5. 扇区三角面 - 按Parity字段分类符号化
-    tri_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "扇区面", "memory")
+    # 5. Sector triangulation - Symbolization by Parity field
+    tri_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "sector surface", "memory")
     pr = tri_layer.dataProvider()
     pr.addAttributes([
         QgsField("Dir", QVariant.String),
@@ -125,7 +125,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
         features.append(ft)
     pr.addFeatures(features)
 
-    # 分类渲染器
+    # Category Renderer
     categories = []
     sym0 = QgsFillSymbol.createSimple({'color': 'white', 'outline_color': 'black', 'outline_width': '0.2'})
     cat0 = QgsRendererCategory(0, sym0, "Parity 0")
@@ -138,21 +138,21 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     tri_layer.setRenderer(renderer)
     layers.append(tri_layer)
 
-    # 6. 坐标参考线（南北线加长，确保超出扇区范围）
-    ref_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "坐标线", "memory")
+    # 6. Coordinate reference lines (extended north-south lines to ensure they extend beyond the sector range)）
+    ref_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "coordinate lines", "memory")
     pr = ref_layer.dataProvider()
     pr.addAttributes([QgsField("Type", QVariant.String)])
     ref_layer.updateFields()
-    # 计算东西方向长度（适当加长）
+    # Calculate the length in the east-west direction (extend it appropriately)
     if max_freq > 0:
-        # 东西线：取东西向两个扇区的最大值，乘以1.05倍，确保稍长
+        # East-West Line: Take the maximum value of the two east-west sectors, multiply it by 1.05, and ensure it is slightly longer
         EW_len = max(freq[4], freq[12]) * scale * 1.05
-        # 南北线：取最大半径的1.05倍，明显长于扇区
+        # North-South Line: Take 1.05 times the maximum radius, significantly longer than the sector
         SN_len = max_freq * scale * 1.05
     else:
         EW_len = 0.001
         SN_len = 0.001
-    # 东西线
+    # East-West Line
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon - EW_len, lat),
@@ -160,7 +160,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     ]))
     ft.setAttributes(["EW"])
     pr.addFeature(ft)
-    # 南北线
+    # North-South Line
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon, lat - SN_len),
@@ -170,8 +170,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     pr.addFeature(ft)
     layers.append(ref_layer)
 
-    # 7. 指北箭头：位于南北线的北端点
-    arrow_layer = QgsVectorLayer("Point?crs=EPSG:4326", "指北箭头", "memory")
+    # 7. North arrow: Located at the northern end of the north-south line
+    arrow_layer = QgsVectorLayer("Point?crs=EPSG:4326", "North arrow", "memory")
     pr_arrow = arrow_layer.dataProvider()
     pr_arrow.addAttributes([QgsField("Direction", QVariant.String)])
     arrow_layer.updateFields()
@@ -189,9 +189,9 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="风玫瑰", s
     arrow_layer.renderer().setSymbol(arrow_symbol)
     layers.append(arrow_layer)
 
-    # 8. 同心圆参考线
+    # 8. Concentric circle reference line
     if show_circles:
-        circle_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "同心圆参考线", "memory")
+        circle_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Concentric circle reference line", "memory")
         pr = circle_layer.dataProvider()
         pr.addAttributes([QgsField("Radius", QVariant.Double)])
         circle_layer.updateFields()
