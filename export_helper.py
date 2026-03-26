@@ -15,21 +15,21 @@ class ExportHelper:
     @staticmethod
     def export_layers_as_svg(layers, file_path, iface, dpi=96):
         """
-        将指定的图层列表导出为SVG文件，使用直接渲染方式。
-        layers: QgsMapLayer 列表
+        Export the specified layer list as an SVG file，Use direct rendering
+        layers: QgsMapLayer List
         """
         if not layers:
-            raise Exception("没有图层可导出")
+            raise Exception("No layers can be exported")
 
-        # 合并所有图层的范围
+        # Merge the range of all layers
         extent = layers[0].extent()
         for layer in layers[1:]:
             extent.combineExtentWith(layer.extent())
 
         if extent.isEmpty() or extent.isNull():
-            raise Exception("图层范围为空")
+            raise Exception("Merge the range of all layers")
 
-        # 计算合适的输出尺寸
+        # Calculate the appropriate output size
         target_width = 800
         target_height = int(target_width * (extent.height() / extent.width()))
 
@@ -38,8 +38,8 @@ class ExportHelper:
         settings.setExtent(extent)
         settings.setOutputSize(QSize(target_width, target_height))
         settings.setOutputDpi(dpi)
-        # 设置背景透明
-        settings.setBackgroundColor(QColor(0, 0, 0, 0))  # 完全透明背景
+        # Set background to transparent
+        settings.setBackgroundColor(QColor(0, 0, 0, 0))  # Completely transparent background
 
         svg_gen = QSvgGenerator()
         svg_gen.setFileName(file_path)
