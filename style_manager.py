@@ -9,27 +9,27 @@ from qgis.core import (
 
 class StyleManager:
     STYLES = {
-        "default": {
-            "sector surface": {"outline": "#000000", "width": 0.2},
-            "outer ring road": {"color": "#000000", "width": 0.5},
-            "collection point": {"color": "#FF0000", "size": 2.0},
-            "coordinate lines": {"color": "#000000", "width": 0.3},
-            "closed surface": {"outline": "#000000", "width": 0.2},  # No filler, remains transparent
-            "wind direction frequency": {}
+        "Default": {
+            "Sector Area": {"outline": "#000000", "width": 0.2},
+            "Outer Ring": {"color": "#000000", "width": 0.5},
+            "Collection Point": {"color": "#FF0000", "size": 2.0},
+            "Coordinate Line": {"color": "#000000", "width": 0.3},
+            "Closed Area": {"outline": "#000000", "width": 0.2},  # No fill, keep transparent
+            "Wind Frequency": {}
         },
-        "warm": {
-            "sector surface": {"outline": "#BF360C", "width": 0.2},
-            "outer ring road": {"color": "#FF6F00", "width": 0.5},
-            "collection point": {"color": "#D32F2F", "size": 2.0},
-            "coordinate lines": {"color": "#757575", "width": 0.3},
-            "closed surface": {"outline": "#FF6F00", "width": 0.2},
+        "Warm Color": {
+            "Sector Area": {"outline": "#BF360C", "width": 0.2},
+            "Outer Ring": {"color": "#FF6F00", "width": 0.5},
+            "Collection Point": {"color": "#D32F2F", "size": 2.0},
+            "Coordinate Line": {"color": "#757575", "width": 0.3},
+            "Closed Area": {"outline": "#FF6F00", "width": 0.2},
         },
-        "cool": {
-            "sector surface": {"outline": "#0288D1", "width": 0.2},
-            "outer ring road": {"color": "#01579B", "width": 0.5},
-            "collection point": {"color": "#0D47A1", "size": 2.0},
-            "coordinate lines": {"color": "#BDBDBD", "width": 0.3},
-            "closed surface": {"outline": "#01579B", "width": 0.2},
+        "Cold Color": {
+            "Sector Area": {"outline": "#0288D1", "width": 0.2},
+            "Outer Ring": {"color": "#01579B", "width": 0.5},
+            "Collection Point": {"color": "#0D47A1", "size": 2.0},
+            "Coordinate Line": {"color": "#BDBDBD", "width": 0.3},
+            "Closed Area": {"outline": "#01579B", "width": 0.2},
         }
     }
 

@@ -15,21 +15,21 @@ class ExportHelper:
     @staticmethod
     def export_layers_as_svg(layers, file_path, iface, dpi=96):
         """
-        Export the specified layer list as an SVG file，Use direct rendering
-        layers: QgsMapLayer List
+        Export the specified layer list as an SVG file using direct rendering.
+        layers: QgsMapLayer list
         """
         if not layers:
-            raise Exception("No layers can be exported")
+            raise Exception("No layers to export")
 
-        # Merge the range of all layers
+        # Combine the extents of all layers
         extent = layers[0].extent()
         for layer in layers[1:]:
             extent.combineExtentWith(layer.extent())
 
         if extent.isEmpty() or extent.isNull():
-            raise Exception("Merge the range of all layers")
+            raise Exception("Layer extent is empty")
 
-        # Calculate the appropriate output size
+        # Calculate suitable output dimensions
         target_width = 800
         target_height = int(target_width * (extent.height() / extent.width()))
 
@@ -38,8 +38,8 @@ class ExportHelper:
         settings.setExtent(extent)
         settings.setOutputSize(QSize(target_width, target_height))
         settings.setOutputDpi(dpi)
-        # Set background to transparent
-        settings.setBackgroundColor(QColor(0, 0, 0, 0))  # Completely transparent background
+        # Set transparent background
+        settings.setBackgroundColor(QColor(0, 0, 0, 0))  # Fully transparent background
 
         svg_gen = QSvgGenerator()
         svg_gen.setFileName(file_path)

@@ -11,14 +11,14 @@ from .windrose_dialog import WindRoseDialog
 
 
 class WindRosePlugin:
-    """QGIS Plugin Main Class"""
+    """Main class for QGIS plugin"""
 
     def __init__(self, iface):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
         self.actions = []
-        self.menu = self.tr(u'&wind rose diagram')
-        self.toolbar = self.iface.addToolBar(u'Wind Rose Diagram')
+        self.menu = self.tr(u'&Wind Rose')
+        self.toolbar = self.iface.addToolBar(u'Wind Rose')
         self.toolbar.setObjectName(u'WindRoseToolbar')
 
         self.dialog = None
@@ -46,17 +46,17 @@ class WindRosePlugin:
         return action
 
     def initGui(self):
-        icon_path = os.path.join(self.plugin_dir, 'icons', 'windrose.svg')  # You can place an icon file.
+        icon_path = os.path.join(self.plugin_dir, 'icons', 'windrose.svg')  # An icon file can be placed here
         self.add_action(
             icon_path,
-            text=self.tr(u'Wind rose diagram'),
+            text=self.tr(u'Wind Rose'),
             callback=self.run,
-            status_tip=self.tr(u'Generate wind rose diagram'),
+            status_tip=self.tr(u'Generate Wind Rose Diagram'),
             parent=self.iface.mainWindow())
 
     def unload(self):
         for action in self.actions:
-            self.iface.removePluginMenu(self.tr(u'&Wind Rose Diagram'), action)
+            self.iface.removePluginMenu(self.tr(u'&Wind Rose'), action)
             self.iface.removeToolBarIcon(action)
         del self.toolbar
 
@@ -72,7 +72,7 @@ class WindRosePlugin:
             self.point_tool = QgsMapToolEmitPoint(canvas)
             self.point_tool.canvasClicked.connect(self.on_point_tool_clicked)
         canvas.setMapTool(self.point_tool)
-        self.iface.messageBar().pushInfo("Map selection", "Please click on a point on the map.")
+        self.iface.messageBar().pushInfo("Map Pick", "Please click a point on the map.")
 
     def on_point_tool_clicked(self, point, button):
         canvas = self.iface.mapCanvas()

@@ -38,7 +38,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     layers = []
 
     # 1. Point layer
-    pt_layer = QgsVectorLayer("Point?crs=EPSG:4326", "Collection point", "memory")
+    pt_layer = QgsVectorLayer("Point?crs=EPSG:4326", "Collection Point", "memory")
     pr = pt_layer.dataProvider()
     pr.addAttributes([QgsField("Lon", QVariant.Double), QgsField("Lat", QVariant.Double)])
     pt_layer.updateFields()
@@ -48,8 +48,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     pr.addFeature(ft)
     layers.append(pt_layer)
 
-    # 2. Wind direction frequency table
-    freq_layer = QgsVectorLayer("None", "Wind direction frequency", "memory")
+    # 2. Wind frequency table
+    freq_layer = QgsVectorLayer("None", "Wind Frequency", "memory")
     pr = freq_layer.dataProvider()
     pr.addAttributes([QgsField("Dir", QVariant.String),
                       QgsField("Angle", QVariant.Double),
@@ -73,8 +73,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
         rad = np.radians((90 - ang) % 360)
         points.append(QgsPointXY(lon + R * np.cos(rad), lat + R * np.sin(rad)))
 
-    # 3. Outer Ring Road
-    line_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Outer Ring Road", "memory")
+    # 3. Outer ring
+    line_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Outer Ring", "memory")
     pr = line_layer.dataProvider()
     pr.addAttributes([QgsField("MaxR", QVariant.Double)])
     line_layer.updateFields()
@@ -85,8 +85,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     pr.addFeature(ft)
     layers.append(line_layer)
 
-    # 4. Closed face - transparent fill, black outline
-    poly_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "Closed surface", "memory")
+    # 4. Closed area - Transparent fill, black outline
+    poly_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "Closed Area", "memory")
     pr = poly_layer.dataProvider()
     pr.addAttributes([QgsField("MaxR", QVariant.Double)])
     poly_layer.updateFields()
@@ -95,7 +95,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     ft.setAttributes([float(max_freq * scale)])
     pr.addFeature(ft)
 
-    # Set closed surface symbol
+    # Set closed area symbol
     symbol = QgsFillSymbol.createSimple({
         'color': 'rgba(0,0,0,0)',
         'outline_color': 'black',
@@ -104,8 +104,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     poly_layer.renderer().setSymbol(symbol)
     layers.append(poly_layer)
 
-    # 5. Sector triangulation - Symbolization by Parity field
-    tri_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "sector surface", "memory")
+    # 5. Sector triangles - Symbolized by Parity field
+    tri_layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "Sector Area", "memory")
     pr = tri_layer.dataProvider()
     pr.addAttributes([
         QgsField("Dir", QVariant.String),
@@ -125,7 +125,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
         features.append(ft)
     pr.addFeatures(features)
 
-    # Category Renderer
+    # Categorized renderer
     categories = []
     sym0 = QgsFillSymbol.createSimple({'color': 'white', 'outline_color': 'black', 'outline_width': '0.2'})
     cat0 = QgsRendererCategory(0, sym0, "Parity 0")
@@ -138,21 +138,21 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     tri_layer.setRenderer(renderer)
     layers.append(tri_layer)
 
-    # 6. Coordinate reference lines (extended north-south lines to ensure they extend beyond the sector range)）
-    ref_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "coordinate lines", "memory")
+    # 6. Coordinate reference lines (extend NS lines to ensure they go beyond sector reach)
+    ref_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Coordinate Line", "memory")
     pr = ref_layer.dataProvider()
     pr.addAttributes([QgsField("Type", QVariant.String)])
     ref_layer.updateFields()
-    # Calculate the length in the east-west direction (extend it appropriately)
+    # Calculate EW length (extend appropriately)
     if max_freq > 0:
-        # East-West Line: Take the maximum value of the two east-west sectors, multiply it by 1.05, and ensure it is slightly longer
+        # EW line: take max of East/West sectors, multiply by 1.05 to ensure it's slightly longer
         EW_len = max(freq[4], freq[12]) * scale * 1.05
-        # North-South Line: Take 1.05 times the maximum radius, significantly longer than the sector
+        # NS line: take 1.05 of max radius, clearly longer than sector
         SN_len = max_freq * scale * 1.05
     else:
         EW_len = 0.001
         SN_len = 0.001
-    # East-West Line
+    # EW line
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon - EW_len, lat),
@@ -160,7 +160,7 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     ]))
     ft.setAttributes(["EW"])
     pr.addFeature(ft)
-    # North-South Line
+    # NS line
     ft = QgsFeature()
     ft.setGeometry(QgsGeometry.fromPolylineXY([
         QgsPointXY(lon, lat - SN_len),
@@ -170,8 +170,8 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     pr.addFeature(ft)
     layers.append(ref_layer)
 
-    # 7. North arrow: Located at the northern end of the north-south line
-    arrow_layer = QgsVectorLayer("Point?crs=EPSG:4326", "North arrow", "memory")
+    # 7. North arrow: located at the north end of the NS line
+    arrow_layer = QgsVectorLayer("Point?crs=EPSG:4326", "North Arrow", "memory")
     pr_arrow = arrow_layer.dataProvider()
     pr_arrow.addAttributes([QgsField("Direction", QVariant.String)])
     arrow_layer.updateFields()
@@ -189,9 +189,9 @@ def create_rose_layers(lon, lat, freq, labels, angles, group_name="Wind Rose", s
     arrow_layer.renderer().setSymbol(arrow_symbol)
     layers.append(arrow_layer)
 
-    # 8. Concentric circle reference line
+    # 8. Concentric circles reference line
     if show_circles:
-        circle_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Concentric circle reference line", "memory")
+        circle_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "Concentric Circles", "memory")
         pr = circle_layer.dataProvider()
         pr.addAttributes([QgsField("Radius", QVariant.Double)])
         circle_layer.updateFields()

@@ -16,7 +16,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'windrose
 
 
 class WindRoseDialog(QDialog, FORM_CLASS):
-    """主设置对话框"""
+    """Main Settings Dialog"""
 
     pick_point_clicked = pyqtSignal()
 
@@ -35,22 +35,22 @@ class WindRoseDialog(QDialog, FORM_CLASS):
         self.style_manager = StyleManager()
         self.export_helper = ExportHelper(self.iface)
 
-        # 连接按钮信号
+        # Connect button signals
         self.btn_map_point.clicked.connect(self.on_map_point)
         self.btn_manual.clicked.connect(self.on_manual_input)
         self.btn_generate.clicked.connect(self.generate_rose)
         self.btn_export_svg.clicked.connect(self.export_svg)
         self.btn_browse_svg.clicked.connect(self.browse_svg_path)
 
-        # 填充样式
+        # Fill styles
         self.cmb_style.addItems(self.style_manager.get_style_names())
-        # 图形样式
-        self.cmb_graph_style.addItems(["扇区式", "同心圆式"])
-        # 月份选择：先清空再添加，避免UI中预定义项导致重复
+        # Graph styles
+        self.cmb_graph_style.addItems(["Sector-based", "Concentric-circles"])
+        # Month selection: clear then add to avoid duplication with UI predefined items
         self.cmb_month.clear()
-        self.cmb_month.addItems(["全年"] + [f"{i}月" for i in range(1, 13)])
+        self.cmb_month.addItems(["All Year"] + [f"{i}" for i in range(1, 13)])
 
-        # 默认值
+        # Default values
         self.spin_year.setValue(2024)
         self.cmb_height.setCurrentIndex(0)  # 10m
         self.slider_opacity.setValue(80)
@@ -68,10 +68,10 @@ class WindRoseDialog(QDialog, FORM_CLASS):
         self.pick_point_clicked.emit()
 
     def on_manual_input(self):
-        lon, ok1 = QInputDialog.getDouble(self, '手动输入', '经度:', 0, -180, 180, 6)
+        lon, ok1 = QInputDialog.getDouble(self, 'Manual Input', 'Longitude:', 0, -180, 180, 6)
         if not ok1:
             return
-        lat, ok2 = QInputDialog.getDouble(self, '手动输入', '纬度:', 0, -90, 90, 6)
+        lat, ok2 = QInputDialog.getDouble(self, 'Manual Input', 'Latitude:', 0, -90, 90, 6)
         if not ok2:
             return
         self.set_coordinates(lon, lat)
@@ -93,17 +93,17 @@ class WindRoseDialog(QDialog, FORM_CLASS):
 
     def browse_svg_path(self):
         path, _ = QFileDialog.getSaveFileName(
-            self, '保存SVG文件', self.line_svg_path.text(), 'SVG files (*.svg)'
+            self, 'Save SVG File', self.line_svg_path.text(), 'SVG files (*.svg)'
         )
         if path:
             self.line_svg_path.setText(path)
 
     def generate_rose(self):
-        # 检查线程
+        # Check thread
         if self.thread is not None:
             try:
                 if self.thread.isRunning():
-                    QMessageBox.warning(self, '警告', '上一个生成任务尚未完成，请稍候。')
+                    QMessageBox.warning(self, 'Warning', 'The previous generation task has not finished, please wait.')
                     return
                 else:
                     self.thread = None
@@ -113,7 +113,7 @@ class WindRoseDialog(QDialog, FORM_CLASS):
                 self.worker = None
 
         if self.current_lon is None or self.current_lat is None:
-            QMessageBox.warning(self, '错误', '请先选择一个点（地图选点或手动输入）')
+            QMessageBox.warning(self, 'Error', 'Please select a point first (Map Pick or Manual Input)')
             return
 
         year = self.spin_year.value()
@@ -127,16 +127,16 @@ class WindRoseDialog(QDialog, FORM_CLASS):
         self.svg_path = self.line_svg_path.text() if self.export_svg else None
 
         month_text = self.cmb_month.currentText()
-        if month_text == "全年":
+        if month_text == "All Year":
             month = None
-            month_str = "全年"
+            month_str = "AllYear"
         else:
-            month = int(month_text.replace('月', ''))
-            month_str = f"{month:02d}月"
+            month = int(month_text)
+            month_str = f"{month:02d}"
 
         lon_str = f"{self.current_lon:.4f}".replace('.', '_')
         lat_str = f"{self.current_lat:.4f}".replace('.', '_')
-        self.group_name = f"风玫瑰图-{year}-{month_str}-{lon_str}_{lat_str}"
+        self.group_name = f"WindRose-{year}-{month_str}-{lon_str}_{lat_str}"
 
         self.btn_generate.setEnabled(False)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -157,13 +157,13 @@ class WindRoseDialog(QDialog, FORM_CLASS):
         self.thread.start()
 
     def on_data_ready(self, freq, labels, angles):
-        """数据准备就绪，在主线程中创建图层"""
+        """Data ready, create layers in main thread"""
         QApplication.restoreOverrideCursor()
         self.btn_generate.setEnabled(True)
 
         try:
             if self.add_to_project:
-                show_circles = (self.graph_style == "同心圆式")
+                show_circles = (self.graph_style == "Concentric-circles")
                 layers = create_rose_layers(
                     self.current_lon, self.current_lat, freq, labels, angles,
                     group_name=self.group_name, show_circles=show_circles
@@ -171,18 +171,18 @@ class WindRoseDialog(QDialog, FORM_CLASS):
                 StyleManager.apply_style_to_layers(layers, self.style_name, self.opacity)
 
                 if self.export_svg and layers:
-                    # 选择需要导出的图层：扇区面、闭合面、坐标线、指北箭头
-                    export_layer_names = ["扇区面", "闭合面", "坐标线", "指北箭头"]
+                    # Select layers to export: Sector Area, Closed Area, Coordinate Line, North Arrow
+                    export_layer_names = ["Sector Area", "Closed Area", "Coordinate Line", "North Arrow"]
                     export_layers = [lyr for lyr in layers if lyr.name() in export_layer_names]
                     if export_layers:
                         self.export_helper.export_layers_as_svg(export_layers, self.svg_path, self.iface)
                     else:
-                        # 如果没有找到，则导出全部图层（备用）
+                        # If not found, export all layers (fallback)
                         self.export_helper.export_layers_as_svg(layers, self.svg_path, self.iface)
 
-            QMessageBox.information(self, '完成', '风玫瑰图生成完成')
+            QMessageBox.information(self, 'Complete', 'Wind rose generation completed')
         except Exception as e:
-            QMessageBox.critical(self, '错误', f'生成过程中发生错误: {str(e)}')
+            QMessageBox.critical(self, 'Error', f'Error during generation: {str(e)}')
 
         self.thread = None
         self.worker = None
@@ -190,9 +190,9 @@ class WindRoseDialog(QDialog, FORM_CLASS):
     def on_worker_error(self, error_msg):
         QApplication.restoreOverrideCursor()
         self.btn_generate.setEnabled(True)
-        QMessageBox.critical(self, '错误', error_msg)
+        QMessageBox.critical(self, 'Error', error_msg)
         self.thread = None
         self.worker = None
 
     def export_svg(self):
-        QMessageBox.information(self, '提示', '请在生成时勾选“导出SVG”自动导出。')
+        QMessageBox.information(self, 'Info', 'Please check "Export SVG" when generating to export automatically.')

@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Wind Rose Diagram Settings</string>
+   <string>Wind Rose Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="grp_input">
      <property name="title">
-      <string>Location input</string>
+      <string>Location Input</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -25,26 +25,26 @@
         <item>
          <widget class="QToolButton" name="btn_map_point">
           <property name="text">
-           <string>Map selection</string>
+           <string>Map Pick</string>
           </property>
           <property name="icon">
            <iconset theme="QStyle::SP_ArrowUp"/>
           </property>
           <property name="toolTip">
-           <string>Click on the map to select a point.</string>
+           <string>Click map to select point</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btn_manual">
           <property name="text">
-           <string>Manual input</string>
+           <string>Manual Input</string>
           </property>
           <property name="icon">
            <iconset theme="QStyle::SP_FileDialogDetailedView"/>
           </property>
           <property name="toolTip">
-           <string>Manually enter latitude and longitude</string>
+           <string>Manually enter coordinates</string>
           </property>
          </widget>
         </item>
@@ -68,7 +68,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_lon">
           <property name="text">
-           <string>longitude:</string>
+           <string>Longitude:</string>
           </property>
          </widget>
         </item>
@@ -78,7 +78,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_lat">
           <property name="text">
-           <string>latitude::</string>
+           <string>Latitude:</string>
           </property>
          </widget>
         </item>
@@ -93,13 +93,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Data parameters</string>
+      <string>Data Parameters</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_year">
         <property name="text">
-         <string>years:</string>
+         <string>Year:</string>
         </property>
        </widget>
       </item>
@@ -119,7 +119,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_month">
         <property name="text">
-         <string>month:</string>
+         <string>Month:</string>
         </property>
        </widget>
       </item>
@@ -127,27 +127,27 @@
        <widget class="QComboBox" name="cmb_month">
         <item>
          <property name="text">
-          <string>annual</string>
+          <string>All Year</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>January</string>
+          <string>Jan</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>February</string>
+          <string>Feb</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>March</string>
+          <string>Mar</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>April</string>
+          <string>Apr</string>
          </property>
         </item>
         <item>
@@ -157,37 +157,37 @@
         </item>
         <item>
          <property name="text">
-          <string>June</string>
+          <string>Jun</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>July</string>
+          <string>Jul</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>August</string>
+          <string>Aug</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>September</string>
+          <string>Sep</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Octuber</string>
+          <string>Oct</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>November</string>
+          <string>Nov</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>December</string>
+          <string>Dec</string>
          </property>
         </item>
        </widget>
@@ -195,7 +195,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_height">
         <property name="text">
-         <string>high:</string>
+         <string>Height:</string>
         </property>
        </widget>
       </item>
@@ -229,13 +229,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Output style</string>
+      <string>Output Style</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label_style">
         <property name="text">
-         <string>Color scheme:</string>
+         <string>Color Scheme:</string>
         </property>
        </widget>
       </item>
@@ -245,7 +245,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_graph_style">
         <property name="text">
-         <string>Graphic style:</string>
+         <string>Graph Style:</string>
         </property>
        </widget>
       </item>
@@ -253,12 +253,12 @@
        <widget class="QComboBox" name="cmb_graph_style">
         <item>
          <property name="text">
-          <string>sector</string>
+          <string>Sector-based</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>concentric circles</string>
+          <string>Concentric-circles</string>
          </property>
         </item>
        </widget>
@@ -266,7 +266,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_opacity">
         <property name="text">
-         <string>Sector transparency:</string>
+         <string>Sector Opacity:</string>
         </property>
        </widget>
       </item>
@@ -306,7 +306,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="label_svg_path">
         <property name="text">
-         <string>SVG save path:</string>
+         <string>SVG Save Path:</string>
         </property>
        </widget>
       </item>

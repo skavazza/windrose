@@ -1,18 +1,18 @@
 [general]
 name=WindRose
-description=Generate wind rose diagrams (supports selection and manual input).
+description=Generate wind rose diagrams (supports map click and manual input)
 version=1.3.8
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=hexiaosang, OpenQGIS
 email=sho@live.cn
-about= Generates wind rose diagrams based on the Open-Meteo API, with customizable styles and SVG export.
+about=Generate wind rose diagrams based on Open-Meteo API, with customizable styles and SVG export.
 tracker=https://github.com/jokulsarlon/windrose/issues
 repository=https://github.com/jokulsarlon/windrose
-tags=windrose, wind direction, rose diagram, meteorology
+tags=windrose,wind direction,rose diagram,meteorology
 homepage=https://github.com/jokulsarlon/windrose
 category=Analysis
 icon=icons/icon.png
 changelog=
     Version 1.3.7 Update icon
-    Version 1.3.8 Optimize wind frequency map display and adjust SVG background transparency.
+    Version 1.3.8 Optimize wind frequency chart display, adjust svg background to transparent
